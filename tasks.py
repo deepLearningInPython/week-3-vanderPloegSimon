@@ -62,12 +62,17 @@ print(convolve_1d(input_array, kernel_array))
 # (input_height - kernel_height + 1, input_width - kernel_width + 1)
 
 # Your code here:
-# -----------------------------------------------
+
 
 def compute_output_size_2d(input_matrix, kernel_matrix):
-    pass
-
-
+    input_width, input_height = input_matrix.shape
+    kernel_width, kernel_height = kernel_matrix.shape
+    
+    output_width = input_width - kernel_width + 1
+    output_height = input_height - kernel_height + 1
+    
+    convolution_dimensions = (output_width, output_height)
+    return convolution_dimensions
 # -----------------------------------------------
 
 
@@ -81,7 +86,27 @@ def compute_output_size_2d(input_matrix, kernel_matrix):
 def convolute_2d(input_matrix, kernel_matrix):
     # Tip: same tips as above, but you might need a nested loop here in order to
     # define which parts of the input matrix need to be multiplied with the kernel matrix.
-    pass
+       # Determine the output dimensions
+    output_height, output_width = compute_output_size_2d(input_matrix, kernel_matrix)
+    # Initialize the output matrix
+    output_matrix = np.zeros((output_height, output_width))
+    
+    # Perform the convolution
+    for i in range(output_height):
+        for j in range(output_width):
+            # Extract the segment of the input matrix that matches the kernel size
+            segment = input_matrix[i:i + kernel_matrix.shape[0], j:j + kernel_matrix.shape[1]]
+            # Perform element-wise multiplication and sum the result
+            output_matrix[i, j] = np.sum(segment * kernel_matrix)
+    
+    return output_matrix
+
+# Example matrices
+input_matrix = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+kernel_matrix = np.array([[1, 0], [0, -1]])
+
+# Test the function
+print(convolute_2d(input_matrix, kernel_matrix))
 
 
 # -----------------------------------------------
